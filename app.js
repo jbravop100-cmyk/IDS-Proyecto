@@ -1,5 +1,5 @@
 // URL de tu Backend (en local)
-const API_URL = "https://ids-proyecto-fc98.onrender.com";
+const API_URL = "https://ids-proyecto-fc98.onrender.com/api";
 
 document.addEventListener("DOMContentLoaded", () => {
     console.log("🛡️ Sentinel System: Inicializado");
