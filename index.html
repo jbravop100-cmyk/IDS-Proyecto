@@ -6,18 +6,17 @@
     <title>Analista de Ciberseguridad - Portfolio</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        bg: '#0f172a',      /* Fondo Principal (Slate 900) */
-                        surface: '#1e293b', /* Fondo Tarjetas (Slate 800) */
-                        primary: '#22d3ee', /* Color Acento (Cyan 400) */
-                        secondary: '#94a3b8', /* Texto Secundario (Slate 400) */
-                        danger: '#ef4444',    /* Rojo para ataques */
-                        success: '#22c55e'    /* Verde para seguro */
+                        bg: '#0f172a',
+                        surface: '#1e293b',
+                        primary: '#22d3ee',
+                        secondary: '#94a3b8',
+                        danger: '#ef4444',
+                        success: '#22c55e'
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
@@ -35,12 +34,8 @@
         body { background-color: #0f172a; color: #e2e8f0; font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
         .glass-nav { background-color: rgba(15, 23, 42, 0.9); backdrop-filter: blur(8px); }
         .glow-text { text-shadow: 0 0 15px rgba(34, 211, 238, 0.3); }
-        
-        /* Animación suave para las tarjetas */
         .project-card { transition: all 0.3s ease; }
         .project-card:hover { transform: translateY(-5px); border-color: #22d3ee; }
-        
-        /* Estilo para la caja de vectores */
         .vector-box { font-family: 'Courier New', monospace; }
     </style>
 </head>
@@ -48,9 +43,7 @@
 
     <nav class="sticky top-0 z-50 glass-nav border-b border-slate-800">
         <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-xl font-bold text-primary font-mono tracking-wider">
-                &lt;TuNombre /&gt;
-            </a>
+            <a href="#" class="text-xl font-bold text-primary font-mono tracking-wider">&lt;TuNombre /&gt;</a>
             <div class="hidden md:flex space-x-8 text-sm font-medium text-slate-300">
                 <a href="#proyectos" class="hover:text-primary transition">Proyectos</a>
                 <a href="#contacto" class="hover:text-primary transition">Contacto</a>
@@ -66,86 +59,69 @@
             Analista de <span class="text-primary glow-text">Ciberseguridad</span>
         </h1>
         <p class="text-xl text-secondary mb-10 max-w-2xl mx-auto">
-            Especialista en Machine Learning aplicado a la Detección de Amenazas e Intrusiones de Red.
+            Especialista en Machine Learning aplicado a la Detección de Amenazas.
         </p>
         <div class="flex justify-center space-x-6">
-            <a href="#proyectos" class="text-white font-semibold hover:text-primary transition py-2">
-                Ver Proyectos
-            </a>
-            <a href="#contacto" class="border border-slate-600 px-6 py-2 rounded-lg text-primary hover:border-primary hover:bg-primary/10 transition">
-                Contactar
-            </a>
+            <a href="#proyectos" class="text-white font-semibold hover:text-primary transition py-2">Ver Proyectos</a>
+            <a href="#contacto" class="border border-slate-600 px-6 py-2 rounded-lg text-primary hover:border-primary hover:bg-primary/10 transition">Contactar</a>
         </div>
     </header>
 
     <section id="proyectos" class="py-20 bg-slate-900/50 px-6 border-t border-slate-800">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-16">
-                <h3 class="text-3xl font-bold text-white">
-                    <span class="text-primary mr-1">//</span> Proyectos Destacados
-                </h3>
+                <h3 class="text-3xl font-bold text-white"><span class="text-primary mr-1">//</span> Proyectos Destacados</h3>
             </div>
 
             <div class="grid md:grid-cols-2 gap-8">
-                
                 <div class="project-card bg-surface p-8 rounded-xl border border-slate-700 shadow-lg">
                     <div class="flex items-center mb-4">
                         <i data-lucide="siren" class="w-6 h-6 text-danger mr-3"></i>
                         <h4 class="text-xl font-bold text-white">IDS con Machine Learning</h4>
                     </div>
-                    <p class="text-secondary text-sm mb-6 leading-relaxed">
-                        Sistema de Detección de Intrusos capaz de clasificar tráfico benigno y ataques (DDoS, PortScan) en tiempo real utilizando <strong>Random Forest</strong> y <strong>PCA</strong>.
-                    </p>
-
-                    <div class="mt-6 mb-6 border-t border-slate-700 pt-4">
-                        <p class="text-xs font-bold text-primary mb-3 uppercase tracking-wide">
-                            ⚡ Live Demo: Haz clic para probar la IA
-                        </p>
-                        
-                        <div class="grid grid-cols-1 gap-3">
-                            <div class="vector-box cursor-pointer p-3 rounded bg-slate-900 border border-slate-700 hover:border-primary transition group"
-                                 data-vector="0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-sm font-mono text-slate-300">Vector Benigno</span>
-                                    <i data-lucide="check-circle" class="w-4 h-4 text-success group-hover:text-primary"></i>
-                                </div>
-                                <p class="text-[10px] text-slate-500 mt-1 truncate">0.0, 0.0, 0.0... (Tráfico limpio)</p>
-                            </div>
+                    <p class="text-secondary text-sm mb-6">Sistema de Detección de Intrusos utilizando Random Forest y PCA.</p>
                     
-                            <div class="vector-box cursor-pointer p-3 rounded bg-slate-900 border border-slate-700 hover:border-danger transition group"
-                                 data-vector="0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-sm font-mono text-slate-300">Ataque DoS/Hulk</span>
-                                    <i data-lucide="alert-octagon" class="w-4 h-4 text-danger"></i>
-                                </div>
-                                <p class="text-[10px] text-slate-500 mt-1 truncate">0.0... 1.0 (Patrón Malicioso)</p>
+                    <div class="mt-6 mb-6 border-t border-slate-700 pt-4">
+                        <p class="text-xs font-bold text-primary mb-3 uppercase tracking-wide">⚡ Live Demo: Haz clic para probar</p>
+                        <div class="grid grid-cols-1 gap-3">
+                            <div class="vector-box cursor-pointer p-3 rounded bg-slate-900 border border-slate-700 hover:border-primary transition group" data-vector="0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0">
+                                <div class="flex justify-between items-center"><span class="text-sm font-mono text-slate-300">Vector Benigno</span><i data-lucide="check-circle" class="w-4 h-4 text-success"></i></div>
+                            </div>
+                            <div class="vector-box cursor-pointer p-3 rounded bg-slate-900 border border-slate-700 hover:border-danger transition group" data-vector="0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0">
+                                <div class="flex justify-between items-center"><span class="text-sm font-mono text-slate-300">Ataque DoS/Hulk</span><i data-lucide="alert-octagon" class="w-4 h-4 text-danger"></i></div>
                             </div>
                         </div>
-                    </div>
-                    <div class="flex gap-2 text-xs text-slate-400 mt-4">
-                        <span class="bg-slate-900 px-2 py-1 rounded border border-slate-700">Python</span>
-                        <span class="bg-slate-900 px-2 py-1 rounded border border-slate-700">Scikit-Learn</span>
-                        <span class="bg-slate-900 px-2 py-1 rounded border border-slate-700">FastAPI</span>
                     </div>
                 </div>
 
                 <div class="project-card bg-surface p-8 rounded-xl border border-slate-700 shadow-lg">
-                    <div class="flex items-center mb-4
+                    <div class="flex items-center mb-4">
+                        <i data-lucide="file-code" class="w-6 h-6 text-yellow-400 mr-3"></i>
+                        <h4 class="text-xl font-bold text-white">Análisis de Malware</h4>
                     </div>
+                    <p class="text-secondary text-sm mb-6">Clasificador estático de archivos PE maliciosos.</p>
+                </div>
             </div>
         </div>
     </section>
 
     <section id="contacto" class="py-20 px-6 border-t border-slate-800">
-        </section>
+        <div class="max-w-xl mx-auto">
+            <h3 class="text-3xl font-bold text-white mb-8 text-center">Iniciar Comunicación</h3>
+            <form id="contactForm" class="space-y-4">
+                <input type="text" id="nombre" placeholder="Nombre" class="w-full p-3 bg-surface border border-slate-700 rounded text-white" required>
+                <input type="email" id="email" placeholder="Email" class="w-full p-3 bg-surface border border-slate-700 rounded text-white" required>
+                <textarea id="mensaje" rows="4" placeholder="Mensaje..." class="w-full p-3 bg-surface border border-slate-700 rounded text-white" required></textarea>
+                <button type="submit" class="w-full py-3 bg-primary text-slate-900 font-bold rounded">Enviar</button>
+            </form>
+        </div>
+    </section>
 
     <footer class="text-center py-8 text-slate-600 text-sm border-t border-slate-800 bg-slate-900">
         <p>&copy; 2024 Portfolio Ciberseguridad.</p>
     </footer>
 
-    <script>
-        lucide.createIcons();
-    </script>
-    <script src="app.js"></script>
+    <script>lucide.createIcons();</script>
+    <script src="app.js"></script> 
 </body>
 </html>
