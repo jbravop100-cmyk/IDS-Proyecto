@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IDS - Sistema de Detección de Intrusos (Análisis)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg-dark: #1f2833; 
+            --color-primary: #66fcf1; 
+            --color-secondary: #45a29e; 
+            --color-text-light: #c5c6c7; 
+            --color-success: #17a2b8; 
+            --color-danger: #dc3545; 
+            --color-warning: #ffc107; /* Color para anomalías */
+        }
+
+        body { 
+            font-family: 'Roboto Mono', monospace; 
+            margin: 0; 
+            padding: 40px; 
+            background-color: var(--color-bg-dark); 
+            color: var(--color-text-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 850px;
+            background: #24303d; 
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(102, 252, 241, 0.15); 
+            border: 1px solid #3a4a58;
+        }
+
+        h1 {
+            color: var(--color-primary);
+            border-bottom: 3px solid var(--color-secondary);
+            padding-bottom: 10px;
+            margin-bottom: 5px;
+            font-size: 1.8rem;
+        }
+
+        .subtitle {
+            margin-bottom: 25px;
+            color: var(--color-text-light);
+            font-size: 0.9rem;
+        }
+
+        textarea { 
+            width: 100%; 
+            height: 180px; 
+            margin-bottom: 20px; 
+            padding: 15px; 
+            box-sizing: border-box;
+            border: 1px solid var(--color-secondary);
+            border-radius: 8px;
+            resize: vertical;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 13px;
+            background-color: #1a232b;
+            color: var(--color-primary);
+        }
+        textarea:focus {
+            border-color: var(--color-primary);
+            outline: none;
+            box-shadow: 0 0 5px rgba(102, 252, 241, 0.5);
+        }
+
+        button { 
+            width: 100%;
+            padding: 15px; 
+            background-color: var(--color-secondary); 
+            color: var(--color-bg-dark); 
+            border: none; 
+            cursor: pointer; 
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+        button:hover {
+            background-color: var(--color-primary);
+            transform: translateY(-2px);
+        }
+
+        #resultado { 
+            margin-top: 30px; 
+            padding: 25px; 
+            border: 1px solid var(--color-secondary); 
+            background-color: #1a232b;
+            border-radius: 8px;
+        }
+        #resultado p { margin: 5px 0; }
+
+        .status-label { 
+            font-size: 1.1rem;
+            padding: 5px 10px;
+            border-radius: 4px;
+            display: inline-block;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .success { color: var(--color-bg-dark); background-color: var(--color-success); }
+        .danger { color: white; background-color: var(--color-danger); }
+        .warning { color: #212529; background-color: var(--color-warning); } /* Estilo nuevo */
+        
+        .error-message {
+            color: var(--color-danger);
+            font-weight: bold;
+            margin-top: 15px;
+            background-color: rgba(220, 53, 69, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+    <h1><span style="color:var(--color-danger);">//</span> IDS Network Traffic Analyzer</h1>
+    <p class="subtitle">Herramienta de prueba para clasificar vectores de tráfico de red. Requisito: **78 Características (Features)** normalizadas.</p>
+
+    <textarea id="feature-input" placeholder="0.0, 0.001, 0.002, 0.0, ..., 0.0 (¡Debe contener exactamente 78 valores!)"></textarea>
+
+    <button onclick="realizarPrediccion()">EJECUTAR PREDICCIÓN</button>
+
+    <div id="resultado">
+        <p style="color: var(--color-secondary);">[LOG] Iniciado. Esperando vector de prueba...</p>
+    </div>
+
+    <script>
+        // 🚨 Configura la URL de tu API local
+        const API_ENDPOINT = 'http://127.0.0.1:5000/predict';
+
+        async function realizarPrediccion() {
+            const inputElement = document.getElementById('feature-input');
+            const resultadoDiv = document.getElementById('resultado');
+            
+            const rawInput = inputElement.value.trim();
+            if (!rawInput) {
+                resultadoDiv.innerHTML = '<p class="error-message">[ERROR] Por favor, introduce las 78 características.</p>';
+                return;
+            }
+
+            try {
+                // 1. Parsear el string a un array de números flotantes
+                const features = rawInput.split(',')
+                    .map(s => parseFloat(s.trim()))
+                    .filter(n => !isNaN(n)); 
+
+                if (features.length !== 78) { 
+                    resultadoDiv.innerHTML = `<p class="error-message">[ERROR] Cantidad de Features INCORRECTA. Esperados: 78. Recibidos: ${features.length}.</p>`;
+                    return;
+                }
+
+                resultadoDiv.innerHTML = '<p style="color: var(--color-primary);">[STATUS] Enviando 78 features al servidor...</p>';
+
+                // 2. Enviar la petición POST al API
+                const response = await fetch(API_ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ features: features })
+                });
+
+                // 3. Manejar la respuesta del servidor
+                const data = await response.json();
+
+                if (!response.ok) {
+                    resultadoDiv.innerHTML = `<p class="error-message">[ERROR 500] Fallo del Servidor.<br>Detalle: ${data.error || 'Problema desconocido'}</p>`;
+                    return;
+                }
+
+                // 4. Mostrar la predicción
+                let etiqueta_texto = data.mensaje_alerta; 
+                let codigo_clase = data.prediccion_clase; 
+                let confianza = (data.confianza * 100);
+                
+                // *** LÓGICA DE SEGURIDAD ***
+                // Es ATAQUE si:
+                // 1. El código NO es 0 (Obvio)
+                // 2. O el código ES 0 pero la confianza es sospechosamente baja (< 70%)
+                
+                let es_ataque_claro = codigo_clase !== 0;
+                let es_sospechoso = (codigo_clase === 0 && confianza < 70);
+
+                let estilo, mensaje_final;
+
+                if (es_ataque_claro) {
+                    estilo = 'danger';
+                    mensaje_final = '¡ATAQUE DETECTADO!';
+                } else if (es_sospechoso) {
+                    estilo = 'danger'; // Lo ponemos rojo también por seguridad
+                    mensaje_final = '¡ANOMALÍA DETECTADA!';
+                    etiqueta_texto = "Tráfico inusual (Baja Confianza en Benigno)";
+                } else {
+                    estilo = 'success';
+                    mensaje_final = 'TRÁFICO BENIGNO';
+                }
+                
+                let htmlResultado = `
+                    <p style="color: var(--color-primary); margin-bottom: 15px;">[RESULTADO] Análisis completado con éxito.</p>
+                    <p><strong>Clasificación:</strong> 
+                        <span class="status-label ${estilo}">${mensaje_final}</span>
+                    </p>
+                    <p><strong>Detalle Técnico:</strong> Código ${codigo_clase} (${etiqueta_texto})</p>
+                    <p><strong>Nivel de Confianza:</strong> <span style="color: var(--color-primary); font-weight: bold;">${confianza.toFixed(2)}%</span></p>
+                    <p style="font-size: 0.8rem; color: var(--color-secondary); margin-top: 15px;">*Nota: Confianza baja (<70%) en tráfico benigno se considera anomalía.</p>
+                `;
+
+                resultadoDiv.innerHTML = htmlResultado;
+
+            } catch (error) {
+                resultadoDiv.innerHTML = `<p class="error-message">[ERROR DE CONEXIÓN] Asegúrate de que el servidor Flask esté activo en http://127.0.0.1:5000. Detalle: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

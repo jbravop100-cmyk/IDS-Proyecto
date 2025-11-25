@@ -1,0 +1,48 @@
+# --- PYTHON ---
+# Archivos compilados (bytecodes) que no sirven en otros PC
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- ENTORNOS VIRTUALES ---
+# Carpeta donde instalas las librerías (nunca se sube, pesa mucho)
+venv/
+env/
+.venv/
+.env
+
+# --- BASE DE DATOS (IMPORTANTE) ---
+# Ignorar la BD para no exponer los logs ni mensajes reales
+*.db
+*.sqlite3
+*.sqlite
+backend/*.db
+
+# --- LOGS Y ERRORES ---
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- SISTEMA OPERATIVO ---
+# Archivos basura de Mac y Windows
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# --- IDEs / EDITORES ---
+# Configuraciones locales de tu editor de código
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# --- DISTRIBUCIÓN ---
+dist/
+build/
+*.egg-info/
