@@ -1,5 +1,5 @@
 // URL de tu Backend (en local)
-const API_URL = "http://localhost:8000/api";
+const API_URL = "https://ids-proyecto-fc98.onrender.com";
 
 document.addEventListener("DOMContentLoaded", () => {
     
