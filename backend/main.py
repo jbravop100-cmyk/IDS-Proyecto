@@ -1,13 +1,14 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+import joblib
+import numpy as np
+import os
 from datetime import datetime
-import sqlite3
-import uvicorn
 
 app = FastAPI()
 
-# Permitir conexión desde el Frontend
+# --- CONFIGURACIÓN CORS ---
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -15,52 +16,88 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-DB_NAME = "backend/portfolio.db"
+# --- CARGAR MODELOS DE IA (CEREBRO) ---
+# Buscamos los archivos en la misma carpeta donde está este script
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "random_forest_model.pkl")
+SCALER_PATH = os.path.join(BASE_DIR, "scaler.pkl")
+PCA_PATH = os.path.join(BASE_DIR, "pca.pkl")
+LABEL_PATH = os.path.join(BASE_DIR, "label_encoder.pkl")
 
-# Inicializar Base de Datos
-def init_db():
-    conn = sqlite3.connect(DB_NAME)
-    c = conn.cursor()
-    c.execute('CREATE TABLE IF NOT EXISTS logs (ip TEXT, endpoint TEXT, fecha TEXT)')
-    c.execute('CREATE TABLE IF NOT EXISTS mensajes (nombre TEXT, email TEXT, msj TEXT, fecha TEXT)')
-    conn.commit()
-    conn.close()
+print("--- CARGANDO SISTEMA DE CIBERSEGURIDAD ---")
+try:
+    model = joblib.load(MODEL_PATH)
+    scaler = joblib.load(SCALER_PATH)
+    pca = joblib.load(PCA_PATH)
+    label_encoder = joblib.load(LABEL_PATH)
+    print("✅ Modelos de IA cargados correctamente.")
+except Exception as e:
+    print(f"❌ ERROR CRÍTICO: No se pudieron cargar los modelos: {e}")
+    model = None
 
-init_db()
+# --- ESTRUCTURA DE DATOS ---
+class TrafficData(BaseModel):
+    features: list
 
 class ContactForm(BaseModel):
     nombre: str
     email: str
     mensaje: str
 
-# Middleware Honeypot (Registra todo el tráfico)
+# --- MIDDLEWARE (HONEYPOT) ---
+# Registra cada visita en los logs de Render
 @app.middleware("http")
-async def honeypot_logger(request: Request, call_next):
+async def log_requests(request: Request, call_next):
     if request.method != "OPTIONS":
-        try:
-            conn = sqlite3.connect(DB_NAME)
-            c = conn.cursor()
-            c.execute("INSERT INTO logs VALUES (?, ?, ?)", 
-                     (request.client.host, request.url.path, datetime.now().isoformat()))
-            conn.commit()
-            conn.close()
-            print(f"[ALERTA] Visita detectada: {request.client.host}")
-        except: pass
-    return await call_next(request)
+        print(f"[ALERTA HONEYPOT] Tráfico detectado desde IP: {request.client.host} hacia {request.url.path}")
+    response = await call_next(request)
+    return response
 
+@app.get("/")
+def home():
+    return {"status": "Online", "System": "Sentinel IDS con Random Forest"}
+
+# --- RUTA DE PREDICCIÓN (LA QUE TE FALTABA) ---
+@app.post("/api/predict")
+def predict_intrusion(data: TrafficData):
+    if model is None:
+        raise HTTPException(status_code=500, detail="El sistema de IA no está activo (Modelos no cargados).")
+    
+    try:
+        # 1. Preparar los datos
+        input_data = np.array([data.features])
+        
+        # 2. Escalar y Reducir (Pipeline)
+        scaled_data = scaler.transform(input_data)
+        pca_data = pca.transform(scaled_data)
+        
+        # 3. Predecir
+        prediction_idx = model.predict(pca_data)[0]
+        prediction_label = label_encoder.inverse_transform([prediction_idx])[0]
+        
+        # 4. Calcular confianza
+        probs = model.predict_proba(pca_data)
+        confianza = np.max(probs) * 100
+        
+        # 5. Determinar si es amenaza
+        es_ataque = prediction_label.lower() != "benign"
+        
+        return {
+            "prediction": prediction_label,
+            "is_threat": es_ataque,
+            "confidence": f"{confianza:.2f}%"
+        }
+    except Exception as e:
+        print(f"Error en predicción: {e}")
+        return {"error": str(e)}
+
+# --- RUTA DE CONTACTO ---
 @app.post("/api/contact")
 def save_contact(form: ContactForm):
-    conn = sqlite3.connect(DB_NAME)
-    c = conn.cursor()
-    c.execute("INSERT INTO mensajes VALUES (?, ?, ?, ?)", 
-              (form.nombre, form.email, form.mensaje, datetime.now().isoformat()))
-    conn.commit()
-    conn.close()
-    return {"status": "Mensaje encriptado y guardado"}
-
-@app.get("/api/stats")
-def get_stats():
-    return {"status": "System Online", "module": "Honeypot Active"}
+    # En Render (Gratis) no usamos SQLite persistente, así que solo lo imprimimos en consola segura
+    print(f"📩 NUEVO MENSAJE de {form.nombre} ({form.email}): {form.mensaje}")
+    return {"status": "Mensaje recibido y registrado en logs seguros."}
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=10000)
