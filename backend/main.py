@@ -5,6 +5,7 @@ import joblib
 import numpy as np
 import os
 import sys
+from xgboost import XGBClassifier
 
 app = FastAPI()
 
@@ -19,7 +20,7 @@ app.add_middleware(
 # --- CARGAR MODELOS ---
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # Ajustamos las rutas por si acaso
-MODEL_PATH = os.path.join(BASE_DIR, "random_forest_model.pkl")
+MODEL_PATH = os.path.join(BASE_DIR, "xgboost_model.pkl")
 SCALER_PATH = os.path.join(BASE_DIR, "scaler.pkl")
 PCA_PATH = os.path.join(BASE_DIR, "pca.pkl")
 LABEL_PATH = os.path.join(BASE_DIR, "label_encoder.pkl")
